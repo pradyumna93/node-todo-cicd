@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs_app_deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs_app
+  template:
+    metadata:
+      labels:
+        app: nodejs_app
+    spec:
+      containers:
+      - name: my_nodejs_deployment
+        image: prad72/nodejs_app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs_app_service
+spec:
+  selector:
+    app.kubernetes.io/name: nodejs_app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 9376
+  type: LoadBalancer
